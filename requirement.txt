@@ -1,7 +1,9 @@
 config
 fastapi
-llama_index==0.8.0
+tiktoken
+llama_index
 python-multipart
 uvicorn
 pypdf
 os-sys
+
