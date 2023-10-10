@@ -4,4 +4,3 @@ llama_index
 python-multipart
 uvicorn
 pypdf
-os
