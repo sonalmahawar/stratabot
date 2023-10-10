@@ -1,6 +1,7 @@
 config
 fastapi
 langchain==0.0.17
+fsspec==2023.1.0
 llama_index
 python-multipart
 uvicorn
