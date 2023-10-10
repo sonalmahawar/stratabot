@@ -1,7 +1,7 @@
 config
 fastapi
 openai
-llama_index==0.8.42
+llama_index==0.7
 fsspec==2023.1.0
 langchain==0.0.26
 jsonpatch==1.33
