@@ -2,7 +2,7 @@ config
 fastapi
 langchain==0.0.17
 fsspec==2023.1.0
-llama_index
+llama_index==0.8.0
 python-multipart
 uvicorn
 pypdf
