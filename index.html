@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>StrataBot</title>
+    <style>
+        /* Existing styles ... */
+
+        #file-list {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+#file-list li {
+    border-bottom: 1px solid #ccc; /* Add a bottom border to each list item */
+    padding: 5px 0; /* Add some padding */
+}
+
+
+
+
+        body {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right, #00bcd4, #2196F3);
+            overflow-x: hidden;
+        }
+
+        .uploaded-files-box {
+            border: 2px solid #dbdcdd;
+            background-color: #435e74;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .upload-section {
+    display: flex;
+    justify-content: space-between;  /* Align items on both ends */
+    align-items: center;  /* Vertically align items */
+}
+
+        #loading-animation {
+            display: none;
+            width: 40px; /* Reduced size */
+            height: auto;
+        }
+
+
+
+        .sidebar {
+            flex: 1;
+            background-color: #2E2E2E;
+            color: white;
+            
+            padding: 20px;
+            box-shadow: 3px 0 5px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bottom-fixed {
+    position: absolute;
+    border-top: 1px solid lightgray;
+    bottom: 0;
+    width: 98%;
+    padding: 10px;
+    background-color: #2E2E2E;  /* Same as sidebar background */
+}
+
+        .sidebar h1 {
+        text-align: center;
+        font-size: 36px; /* Increase the size */
+        color: lightgray;
+}
+
+.sidebar h1 img {
+            width: 50px;
+            vertical-align: middle;
+        }
+
+        .container {
+            flex: 3;
+            padding: 20px;
+            background: url('https://img.freepik.com/free-vector/minimalist-white-abstract-wallpaper_23-2148816029.jpg'); /* Added background image */
+            background-size: cover; /* Make sure the background image covers the entire container */
+            overflow-y: auto;
+            /* overflow-y: hidden; */
+            max-height: 100vh;
+            overflow-x: hidden;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px;
+        }
+
+        #loading-gif {
+            width: 100px; /* Reduced size */
+            height: auto;
+            display: block;
+            margin: auto; /* Centered */
+        }
+        input[type="text"] {
+            padding: 12px;
+            width: 98%  !important; 
+            margin-bottom: 15px;
+            border: 2px solid #032d50 !important;
+            border-radius: 8px;
+        }
+
+       
+        #chat-box {
+    padding: 15px;
+    width: 98%; /* Changed width */
+    margin-top: 20px;
+    border: 2px solid #032d50 !important;
+    border-radius: 8px;
+    max-height: 80vh;
+    overflow-y: hidden;
+    overflow-y: scroll !important;
+    }
+
+        h1, h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #424242;
+        }
+
+        
+        h2 {
+            font-size: 20px;
+        }
+
+
+        /* New or modified styles */
+        .sidebar h1, .sidebar h2 {
+            color: lightgray; /* Change color to light gray */
+        }
+
+        input[type="file"], input[type="text"] {
+            padding: 12px;
+            width: 80%; /* Change width */
+            margin-bottom: 15px;
+            border: 2px solid #2196F3; /* Change border style */
+            border-radius: 8px; /* Change border radius */
+        }
+
+        #text-output, #loading, #chat-box {
+            padding: 15px;
+            width: 80%; /* Change width */
+            margin-top: 20px;
+            border: 2px solid #2196F3; /* Change border style */
+            border-radius: 8px; /* Change border radius */
+        }
+
+        .delete-icon {
+    background: none;
+    border: none;  /* Removed border */
+    cursor: pointer;
+    font-size: 16px;
+    color: lightgray;  /* Changed color to light gray */
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+
+.user-icon, .bot-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+
+/* Active or "pressed" effect */
+.delete-icon:active {
+    transform: scale(0.9);  /* Scale down */
+    transition: transform 0.1s ease-in-out;  /* Quick transition */
+}
+
+.delete-icon:hover {
+    background-color: rgb(110, 136, 165);  /* Change background */
+    color: white;  /* Change text color */
+    transform: scale(1.1);  /* Slightly enlarge */
+}
+
+
+#chat-box {
+    max-height: 80vh; /* Increase the height to fit the screen */
+    width: 98%; /* Increase the width */
+}
+
+#loading-animation img {
+    width: 20px;  /* Reduced size */
+    height: auto;
+    vertical-align: middle;  /* Align with the Process button */
+    margin-left: 10px;  /* Add some space between the button and the icon */
+}
+
+        .user-message, .bot-message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: left;
+     
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+        }
+
+        .bot-message {
+            background-color: #f3e5f5;
+        }
+
+        .user-message span, .bot-message span {
+    font-weight: bold;
+}
+
+        /* New or modified styles */
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.choose-file-button, .upload-button, .submit-button {
+            padding: 12px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .choose-file-button:hover, .upload-button:hover, .submit-button:hover {
+            background-color: #1976D2;
+        }
+
+        /* Butoon animation */
+
+        
+.btn {
+    width: 180px;
+    height: 60px;
+    cursor: pointer;
+    /* background: transparent; */
+    background-color: rgb(107, 106, 106);
+    border: 1px solid #3a3a3a;
+    outline: none;
+    transition: 1s ease-in-out;
+    color: white;
+    font-size: 18px;
+    font-weight: 100;
+    position: relative;
+}
+
+.btn svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    fill: none;
+    stroke: #fff;
+    stroke-dasharray: 150 480;
+    stroke-dashoffset: 150;
+    transition: 1s ease-in-out;
+}
+
+.btn:hover {
+    transition: 1s ease-in-out;
+    background: #0b2d50;
+}
+
+.btn:hover svg {
+    stroke-dashoffset: -480;
+}
+
+.btn span {
+    position: relative;
+    z-index: 1;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1>
+            <img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-500.jpg" alt="Stratabot Logo">
+            Stratabot
+        </h1> 
+
+        <div class="uploaded-files-box">
+        <h2>Uploaded Files:</h2>
+        
+        <ul id="file-list">
+            <!-- List of uploaded files will be appended here -->
+        </ul>
+    </div>
+
+
+    <div class="bottom-fixed">
+    <h4>Upload your Documents here and click on 'Process'.</h4>
+    
+    <label class="btn choose-file-button">
+        <input type="file" id="files" multiple style="display:none;">
+        <svg width="180" height="60">
+            <rect x="0" y="0" rx="30" ry="30" width="180" height="60"></rect>
+        </svg>
+        <span>Browse Files</span>
+    </label>
+    <br><br>
+
+    <!-- <input type="file" id="files" multiple class="choose-file-button"><br><br> -->
+    <!-- Wrap the Process button and loading animation in a flex container -->
+    <div class="upload-section">
+        <!-- <button onclick="uploadFile()" class="upload-button">Process</button> -->
+        <button onclick="uploadFile()" class="btn upload-button">
+            <svg width="180" height="60">
+                <rect x="0" y="0" rx="30" ry="30" width="180" height="60"></rect>
+            </svg>
+            <span>Process</span>
+        </button>
+        <span id="loading-animation" style="display: none;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif?20140201131911" alt="Loading...">
+        </span>
+    </div>
+    <div id="upload-message"></div>
+</div>
+</div>
+
+
+    <div class="container">
+        <h1>Ask a question about your documents:</h1>
+        <form id="query-form">
+            <input id="text-input" type="text"><br><br>
+            <!-- <button type="submit">Submit</button> -->
+            <button type="submit" class="btn submit-button">
+                <svg width="180" height="60">
+                    <rect x="0" y="0" rx="30" ry="30" width="180" height="60"></rect>
+                </svg>
+                <span>Submit</span>
+            </button>
+        </form>
+        <img id="loading-gif" src="https://media.tenor.com/rTZFAya5snwAAAAC/loading.gif" alt="gif" style="display: none;" />
+        <h2>Output:</h2>
+        <div id="chat-box">
+            <!-- Chat messages will be appended here -->
+        </div>
+    </div>
+
+    <!-- Existing JavaScript here -->
+    <script>
+        let sessionId = sessionStorage.getItem('sessionId');
+
+ 
+
+if (!sessionId) {  
+
+sessionId = 'some-unique-id';  // Generate a real unique ID here
+
+sessionStorage.setItem('sessionId', sessionId);
+
+}
+
+
+
+
+
+// Add an event listener to the form
+
+document.getElementById("query-form").addEventListener("submit", async function(e) {
+
+    e.preventDefault(); // Prevent the default form submission
+
+    await submitText();
+
+});
+
+
+async function uploadFile() {
+
+document.getElementById("loading-animation").style.display = "block";
+const fileInput = document.getElementById("files");
+const fileList = document.getElementById("file-list");
+const formData = new FormData();
+
+for (let i = 0; i < fileInput.files.length; i++) {
+formData.append("files", fileInput.files[i]);
+const li = document.createElement("li");
+li.textContent = fileInput.files[i].name;
+fileList.appendChild(li);
+}
+
+const response = await fetch("/uploadfile/", {
+method: "POST",
+body: formData,
+});
+
+const data = await response.json();
+document.getElementById("upload-message").innerText = data.message;
+
+document.getElementById("loading-animation").style.display = "none";
+
+alert("File uploaded successfully!");
+}
+
+
+
+
+
+async function submitText() {
+
+    document.getElementById("loading-gif").style.display = "block";
+
+    const textValue = document.getElementById("text-input").value;
+
+
+
+const sessionId = sessionStorage.getItem('sessionId');
+
+
+
+const response = await fetch("/text/", {
+
+method: "POST",
+
+headers: {
+
+    "Content-Type": "application/x-www-form-urlencoded",
+
+},
+
+body: `text=${encodeURIComponent(textValue)}&session_id=${sessionId}`,
+
+});
+
+
+
+const data = await response.json();
+
+const chatBox = document.getElementById("chat-box");
+
+
+
+// Append the user's question and the bot's answer to the chat box
+
+// Append the user's question and the bot's answer to the chat box
+
+// Append the user's question and the bot's answer to the chat box
+chatBox.innerHTML += `<div class="user-message"><img src="https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg" class="user-icon">User : ${textValue}</div>`;
+chatBox.innerHTML += `<div class="bot-message"><img src="https://about.gitlab.com/images/press/logo/jpg/gitlab-logo-500.jpg" class="bot-icon">Bot : ${data.text}</div>`;
+// chatBox.innerHTML += `<div class="bot-message"><img src="https://icon-library.com/images/logo-icon-png/logo-icon-png-7.jpg" class="bot-icon">Bot : ${data.text}</div>`;
+chatBox.scrollTop = chatBox.scrollHeight;
+    // ... existing code
+
+
+ // Save chat history to localStorage
+
+localStorage.setItem("chatHistory", chatBox.innerHTML);
+
+
+
+  // Hide the loading symbol
+
+document.getElementById("loading-gif").style.display = "none";
+
+}
+
+// Your existing JavaScript code here
+
+async function fetchFiles() {
+    const fileList = document.getElementById("file-list");
+    const response = await fetch("/fetchfiles/");
+    const data = await response.json();
+    fileList.innerHTML = "";
+    data.files.forEach((filename) => {
+        const li = document.createElement("li");
+        li.textContent = filename;
+
+      // Modified delete button
+const deleteBtn = document.createElement("button");
+deleteBtn.className = "delete-icon";
+deleteBtn.innerHTML = "&#10006;"; // Unicode for 'X', replace with your image
+deleteBtn.onclick = function () { deleteFile(filename); };
+li.appendChild(deleteBtn);
+fileList.appendChild(li);
+
+    });
+}
+
+
+async function deleteFile(filename) {
+    const response = await fetch(`/deletefile/${filename}/`, {
+        method: "DELETE",
+    });
+    const data = await response.json();
+    alert(data.message);
+    fetchFiles();
+}
+
+// Fetch files initially
+fetchFiles();
+
+        // Modified delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-icon";
+        deleteBtn.innerHTML = "&#10006;"; // Unicode for 'X', replace with your image
+        deleteBtn.onclick = function () { deleteFile(filename); };
+        li.appendChild(deleteBtn);
+        fileList.appendChild(li);
+
+        // ...
+    </script>
+
+</body>
+
+</html>
+
+

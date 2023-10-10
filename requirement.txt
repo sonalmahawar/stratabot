@@ -1,0 +1,8 @@
+config
+os
+fastapi
+shutil
+llama_index
+python-multipart
+uvicorn
+pypdf
