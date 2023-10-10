@@ -1,6 +1,5 @@
 config
 fastapi
-tiktoken
 llama_index
 python-multipart
 uvicorn
