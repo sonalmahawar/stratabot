@@ -3,7 +3,7 @@ fastapi
 openai
 llama_index==0.8.42
 fsspec==2023.1.0
-langchain==0.0.311
+langchain==0.0.26
 jsonpatch==1.33
 langsmith==0.0.43
 soupsieve==2.5
