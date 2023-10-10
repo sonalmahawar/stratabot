@@ -1,6 +1,5 @@
 config
 fastapi
-shutil
 llama_index
 python-multipart
 uvicorn
