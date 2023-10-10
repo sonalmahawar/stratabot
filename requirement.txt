@@ -1,5 +1,5 @@
 config
-os
+os =="10"
 fastapi
 shutil
 llama_index
