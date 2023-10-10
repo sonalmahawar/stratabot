@@ -1,8 +1,8 @@
 config
-os =="10"
 fastapi
 shutil
 llama_index
 python-multipart
 uvicorn
 pypdf
+os
