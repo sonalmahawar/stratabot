@@ -1,3 +1,3 @@
 API_DETAILS={
-    "openai_api_key": "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"
+    "openai_api_key": "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"
 }   
